@@ -40,6 +40,8 @@ async function main() {
     }, '')
 
     cb.writeSync(list)
+
+    console.log("Here is your GitHub activity for the day: \n")
     console.log(list)
     console.log("Copied to clipboard!")
   }
