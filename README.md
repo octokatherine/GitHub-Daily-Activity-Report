@@ -6,6 +6,8 @@
 
 https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
 
+After creation, authorize the org you want activity from
+
 2. Add the token to a .env file in the root directory of the project  
 ```
 GITHUB_API_KEY=<your token>
