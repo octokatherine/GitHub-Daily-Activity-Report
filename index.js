@@ -33,7 +33,7 @@ async function main() {
 
     const list = data.reduce((acc, curr) => {
       const item = formatEvent(curr)
-      if (item) {
+      if (item && !acc.includes(item)) {
         acc += `${item}\n`
       }
       return acc
@@ -45,11 +45,16 @@ async function main() {
 }
 
 function formatEvent(event) {
-  switch (event.type) {
+  const {type, payload} = event
+
+  switch (type) {
     case 'IssuesEvent':
-      const payload = event.payload
       if (payload.action === 'opened') {
         return `:issue-new: Opened "${payload.issue.title}" ${payload.issue.html_url}`
+      }
+    case 'PullRequestReviewEvent':
+      if (payload.action === 'created') {
+        return `:mag: Reviewed "${payload.pull_request.title}" ${payload.pull_request.html_url}`
       }
   }
 }
