@@ -56,6 +56,14 @@ function formatEvent(event) {
       if (payload.action === 'created') {
         return `:mag: Reviewed "${payload.pull_request.title}" ${payload.pull_request.html_url}`
       }
+    case 'PullRequestEvent':
+      if (payload.action === 'opened') {
+        return `Opened "${payload.pull_request.title}" ${payload.pull_request.html_url}`
+      }
+    case 'PullRequestEvent':
+      if (payload.action === 'review_requested') {
+        return `Put up for review "${payload.pull_request.title}" ${payload.pull_request.html_url}`
+      }
   }
 }
 
