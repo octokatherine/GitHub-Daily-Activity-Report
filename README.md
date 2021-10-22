@@ -2,7 +2,7 @@
 
 ### Usage 
 
-1. Create a GitHub personal access token 
+1. Create a GitHub personal access token with the `repo` scope
 
 https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
 
