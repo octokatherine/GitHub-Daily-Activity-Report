@@ -58,13 +58,17 @@ function formatEvent(event) {
       }
     case 'PullRequestEvent':
       if (payload.action === 'opened') {
-        return `Opened "${payload.pull_request.title}" ${payload.pull_request.html_url}`
-      }
-    case 'PullRequestEvent':
-      if (payload.action === 'review_requested') {
-        return `Put up for review "${payload.pull_request.title}" ${payload.pull_request.html_url}`
+        return `:pr-open: Opened "${payload.pull_request.title}" ${payload.pull_request.html_url}`
+      } else if (payload.action === 'review_requested') {
+        return `:ready-for-review: Put up for review "${payload.pull_request.title}" ${payload.pull_request.html_url}`
+      } else if (payload.action === 'closed' && payload.pull_request && payload.pull_request.merged) {
+        return `:pr-merged: Merged "${payload.pull_request.title}" ${payload.pull_request.html_url}`
+      } else if (payload.action === 'closed' && payload.pull_request && !payload.pull_request.merged) {
+        return `:pr-closed: Closed "${payload.pull_request.title}" ${payload.pull_request.html_url}`
       }
   }
+
+  return type + payload.action
 }
 
 main()
