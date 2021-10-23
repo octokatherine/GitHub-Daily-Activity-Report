@@ -12,6 +12,9 @@ const octokit = new Octokit({ auth: apiKey })
 // The org that the contains the events you want to include
 const org = 'github'
 
+const today = new Date().toLocaleString( 'sv', { timeZoneName: 'short' } ).substring(0, 10)
+let userLogin = ''
+
 async function main() {
   if (!apiKey) {
     console.log("Please set the GITHUB_API_KEY environment variable")
@@ -19,17 +22,17 @@ async function main() {
     const {
       data: { login },
     } = await octokit.rest.users.getAuthenticated()
+    userLogin = login
 
-    const result = await octokit.request('GET /users/{username}/events', {
-      username: login,
-      per_page: 100, 
-    })
+    let page = 1
+    let data = await getListItems(page)
 
-    const today = new Date().toLocaleString( 'sv', { timeZoneName: 'short' } ).substring(0, 10)
-
-    const data = result.data.filter(event => {
-      return event.repo.name.includes(org) && event.created_at.includes(today)
-    })
+    // GH rate limits after 4 pages, but it's probably always enough to cover the current day
+    while (page < 4) {
+      const nextData = await getListItems(page)
+      data = [...data, ...nextData]
+      page++
+    }
 
     const list = data.reduce((acc, curr) => {
       const item = formatEvent(curr)
@@ -45,6 +48,20 @@ async function main() {
     console.log(list)
     console.log("Copied to clipboard!")
   }
+}
+
+async function getListItems(page) {
+  const result = await octokit.request('GET /users/{username}/events', {
+    username: userLogin,
+    per_page: 100, 
+    page: page
+  })
+
+  const data = result.data.filter(event => {
+    return event.repo.name.includes(org )&& event.created_at.includes(today)
+  })
+
+  return data
 }
 
 function formatEvent(event) {
