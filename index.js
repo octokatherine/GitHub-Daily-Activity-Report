@@ -58,7 +58,7 @@ async function getListItems(page) {
   })
 
   const data = result.data.filter(event => {
-    return event.repo.name.includes(org )&& event.created_at.includes(today)
+    return event.repo.name.includes(org) && event.created_at.includes(today)
   })
 
   return data
