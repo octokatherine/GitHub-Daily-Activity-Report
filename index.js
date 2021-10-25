@@ -79,8 +79,6 @@ function formatEvent(event) {
     case 'PullRequestEvent':
       if (payload.action === 'opened') {
         return `:pr-open: Opened - ${payload.pull_request.title}: ${payload.pull_request.html_url}`
-      } else if (payload.action === 'review_requested') {
-        return `:ready-for-review: Put up for review - ${payload.pull_request.title}: ${payload.pull_request.html_url}`
       } else if (payload.action === 'closed' && payload.pull_request && payload.pull_request.merged) {
         return `:pr-merged: Merged - ${payload.pull_request.title}: ${payload.pull_request.html_url}`
       } else if (payload.action === 'closed' && payload.pull_request && !payload.pull_request.merged) {
